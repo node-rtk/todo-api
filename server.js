@@ -2,26 +2,14 @@
  * Created by r.pek on 4/10/2018.
  */
 var express = require('express');
+var bodyParser=require('body-parser');
+
 var app = express();
+app.use(bodyParser.json())
 var PORT = process.env.PORT||8888;
 
-var todos = [
-    {
-        id: 1,
-        name:'Pek ratanak',
-        description:'He is handsome!'
-    },
-    {
-        id:2,
-        name:'Hum Vorn',
-        description:'He is fat like a pig!'
-    },
-    {
-        id:3,
-        name:'Heim Seyha',
-        description:'He is thin!'
-    }
-];
+var todos = [];
+var todoNextId=1;
 
 
 app.get('/', function (req, res) {
@@ -29,7 +17,7 @@ app.get('/', function (req, res) {
 });
 
 
-app.get('/json', function(req, res){
+app.get('/todos', function(req, res){
     res.json(todos);
 });
 
@@ -47,6 +35,16 @@ app.get('/todos/:id', function(req, res){
    }else{
        res.status(404).send();
    }
+
+});
+
+app.post('/todos', function(req, res){
+    var body = req.body;
+
+    body.id=todoNextId++;
+
+    todos.push(body);
+    res.json(body);
 
 });
 
