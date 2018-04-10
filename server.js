@@ -47,6 +47,22 @@ app.post('/todos', function(req, res){
 
 });
 
+app.delete('/todos/:id', function(req, res){
+   var todoId = parseInt(req.params.id, 10);
+
+   var findId=_.findWhere(todos, {id:todoId});
+
+
+   if(findId){
+       todos=_.without(todos, findId);
+       return res.json(todos);
+
+   }else{
+       res.status(404).send();
+   }
+
+});
+
 app.listen(PORT, function () {
     console.log('Listen on port : ' + PORT);
 });
