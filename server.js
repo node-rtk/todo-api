@@ -11,7 +11,7 @@ var app = express();
 app.use(bodyParser.json())
 var PORT = process.env.PORT||8888;
 
-var todos = [];
+
 var todoNextId=1;
 
 
@@ -99,46 +99,46 @@ app.post('/todos', function(req, res){
 
 });
 
-app.delete('/todos/:id', function(req, res){
-   var todoId = parseInt(req.params.id, 10);
-   var findId=_.findWhere(todos, {id:todoId});
-   if(findId){
-       todos=_.without(todos, findId);
-       return res.json(todos);
+// app.delete('/todos/:id', function(req, res){
+//    var todoId = parseInt(req.params.id, 10);
+//    var findId=_.findWhere(todos, {id:todoId});
+//    if(findId){
+//        todos=_.without(todos, findId);
+//        return res.json(todos);
 
-   }else{
-       res.status(404).send();
-   }
-});
+//    }else{
+//        res.status(404).send();
+//    }
+// });
 
-app.put('/todos/:id', function(req, res){
-    var todoId = parseInt(req.params.id, 10);
-    var body = _.pick(req.body, 'completed', 'description');
-    var validateAttribute={};
+// app.put('/todos/:id', function(req, res){
+//     var todoId = parseInt(req.params.id, 10);
+//     var body = _.pick(req.body, 'completed', 'description');
+//     var validateAttribute={};
 
-    var matchedTodo=_.findWhere(todos, {id:todoId});
+//     var matchedTodo=_.findWhere(todos, {id:todoId});
 
-    if(!matchedTodo){
-        return res.status(404).send();
-    }
+//     if(!matchedTodo){
+//         return res.status(404).send();
+//     }
 
-    if(body.hasOwnProperty('completed') && _.isBoolean(body.completed)){
-        validateAttribute.completed = body.completed;
-    }else if(body.hasOwnProperty('completed')){
-        return res.status(400).send();
-    }
+//     if(body.hasOwnProperty('completed') && _.isBoolean(body.completed)){
+//         validateAttribute.completed = body.completed;
+//     }else if(body.hasOwnProperty('completed')){
+//         return res.status(400).send();
+//     }
 
-    if(!body.hasOwnProperty('description') && _.isString(body.description) && body.description.trim().length>0){
-        validateAttribute.description=body.description;
-    }else if(body.hasOwnProperty('description')){
-        return res.send(400).send();
-    }
-
-
-    _.extend(matchedTodo, validateAttribute);
+//     if(!body.hasOwnProperty('description') && _.isString(body.description) && body.description.trim().length>0){
+//         validateAttribute.description=body.description;
+//     }else if(body.hasOwnProperty('description')){
+//         return res.send(400).send();
+//     }
 
 
-});
+//     _.extend(matchedTodo, validateAttribute);
+
+
+// });
 
 db.sequelize.sync().then(function(){
     app.listen(PORT, function () {
