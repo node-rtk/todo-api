@@ -2,10 +2,23 @@
  * Created by r.pek on 4/11/2018.
  */
 var Sequelize = require('sequelize');
-var sequelize= new Sequelize(undefined, undefined, undefined, {
-    'dialect': 'sqlite',
-    'storage': __dirname+'/data/basic-sqlite-database.sqlite'
-});
+var env =process.env.NODE_ENV || 'development';
+var sequelize;
+
+if(env==='production'){
+        sequelize= new Sequelize(process.env.DATABASE_URL, {
+                dialect : 'postgres'
+            })
+}else{
+   
+ sequelize= new Sequelize(undefined, undefined, undefined, {
+        'dialect': 'sqlite',
+        'storage': __dirname+'/data/basic-sqlite-database.sqlite'
+    });
+}
+
+
+
 
 var db = {};
 //import model
