@@ -5,7 +5,8 @@ var express = require('express');
 var bodyParser=require('body-parser');
 var _ = require('underscore');
 var db =require('./db');
-var bcrypt=require('bcrypt')
+var bcrypt=require('bcrypt');
+var middleware=require('./middleware.js')(db);
 
 var app = express();
 app.use(bodyParser.json())
@@ -20,7 +21,7 @@ app.get('/', function (req, res) {
 });
 
 
-app.get('/todos', function(req, res){
+app.get('/todos',middleware.requireAuthentication, function(req, res){
     var query = req.query;
     var where ={};
 
@@ -47,7 +48,7 @@ app.get('/todos', function(req, res){
 
 });
 
-app.get('/todos/:id', function(req, res){
+app.get('/todos/:id',middleware.requireAuthentication, function(req, res){
      var todoId=parseInt(req.params.id, 10);
 //     var matched=_.findWhere(todos, {id:todoId});
 //    if(matched){
@@ -69,7 +70,7 @@ app.get('/todos/:id', function(req, res){
 
 });
 
-app.post('/todos', function(req, res){
+app.post('/todos',middleware.requireAuthentication, function(req, res){
     var body = _.pick(req.body, 'completed', 'description');
 
     // db.todo.create({
